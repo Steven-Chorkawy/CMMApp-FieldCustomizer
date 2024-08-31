@@ -3,7 +3,6 @@ import "@pnp/sp/webs";
 import "@pnp/sp/sites";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
-import "@pnp/sp/items/get-all";
 import "@pnp/sp/fields";
 import "@pnp/sp/files";
 import "@pnp/sp/folders";
