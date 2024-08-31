@@ -40,7 +40,7 @@ export default class RequiredMembersFieldCustomizer
 
   public onRenderCell(event: IFieldCustomizerCellEventParameters): void {
     // Use this method to perform your custom cell rendering.        
-    const text: string = `${event.listItem.getValueByName('FileLeafRef')}: ${event.fieldValue}`;
+    const text: string = `${event.fieldValue}`;
 
     const requiredMembers: React.ReactElement<{}> =
       React.createElement(RequiredMembers, { text, event });

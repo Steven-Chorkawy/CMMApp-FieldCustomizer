@@ -10,9 +10,20 @@ export interface IRequiredMembersProps {
   event: IFieldCustomizerCellEventParameters;
 }
 
+export interface IRequiredMembersState {
+  memberCount: Number | null;
+}
+
 const LOG_SOURCE: string = 'RequiredMembers';
 
-export default class RequiredMembers extends React.Component<IRequiredMembersProps, {}> {
+export default class RequiredMembers extends React.Component<IRequiredMembersProps, IRequiredMembersState> {
+  constructor(props: IRequiredMembersProps) {
+    super(props);
+    this.state = {
+      memberCount: null
+    }
+  }
+
   public componentDidMount(): void {
     Log.info(LOG_SOURCE, 'React Element: RequiredMembers mounted');
   }
@@ -26,6 +37,7 @@ export default class RequiredMembers extends React.Component<IRequiredMembersPro
     GetActiveCommitteeMembers(COMMITTEE_NAME)
       .then(value => {
         console.log('Count Res:', value);
+        this.setState({ memberCount: value });
       }).catch(reason => {
         console.error('Failed to query Committee');
         console.error(reason);
@@ -33,7 +45,7 @@ export default class RequiredMembers extends React.Component<IRequiredMembersPro
 
     return (
       <div className={styles.requiredMembers}>
-        {this.props.text}
+        {this.state.memberCount === null ? <div>Loading...</div> : <div>{this.state.memberCount}/{this.props.text}</div> }
       </div>
     );
   }
