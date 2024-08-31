@@ -8,12 +8,18 @@ import "@pnp/sp/files";
 import "@pnp/sp/folders";
 import "@pnp/sp/security";
 
-
 let _sp: SPFI;
 
 export const getSP = (context?: any): SPFI => {
-    if (_sp === null && context !== null) {
+    if (_sp === undefined && context !== null) {
         _sp = spfi().using(SPFx(context));
     }
     return _sp;
 };
+
+export const GetActiveCommitteeMembers = async (committeeName: string): Promise<Number> => {
+    let members = await getSP().web.lists.getByTitle(committeeName).items.filter("OData__Status eq 'Successful'")();
+    debugger;
+    let memberCount = members.length;
+    return memberCount;
+} 

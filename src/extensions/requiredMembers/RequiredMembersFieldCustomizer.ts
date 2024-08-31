@@ -8,7 +8,7 @@ import {
 } from '@microsoft/sp-listview-extensibility';
 
 import * as strings from 'RequiredMembersFieldCustomizerStrings';
-import RequiredMembers, { IRequiredMembersProps } from './components/RequiredMembers';
+import RequiredMembers from './components/RequiredMembers';
 import { getSP } from '../../MyHelperMethods/MyHelperMethods';
 
 /**
@@ -33,20 +33,17 @@ export default class RequiredMembersFieldCustomizer
     Log.info(LOG_SOURCE, JSON.stringify(this.properties, undefined, 2));
     Log.info(LOG_SOURCE, `The following string should be equal: "RequiredMembersFieldCustomizer" and "${strings.Title}"`);
 
-    super.onInit().then(() => {
-      getSP(this.context);
-    });
+    getSP(this.context);
 
     return Promise.resolve();
   }
 
   public onRenderCell(event: IFieldCustomizerCellEventParameters): void {
-    // Use this method to perform your custom cell rendering.
-    console.log('onRenderCell', event);
+    // Use this method to perform your custom cell rendering.        
     const text: string = `${event.listItem.getValueByName('FileLeafRef')}: ${event.fieldValue}`;
 
     const requiredMembers: React.ReactElement<{}> =
-      React.createElement(RequiredMembers, { text } as IRequiredMembersProps);
+      React.createElement(RequiredMembers, { text, event });
 
     ReactDOM.render(requiredMembers, event.domElement);
   }
