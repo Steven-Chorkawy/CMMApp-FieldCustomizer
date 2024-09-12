@@ -55,6 +55,7 @@ export default class RequiredMembers extends React.Component<IRequiredMembersPro
                 this.setState({ memberCount: null });
                 getSP().web.lists.getByTitle(this.props.event.listItem.getValueByName('FileLeafRef')).items.filter("OData__Status eq 'Successful'")()
                   .then(value => {
+                    console.log(value);
                     getClientStorage().local.put(this.props.event.listItem.getValueByName('FileLeafRef'), value.length);
                     this.setState({ memberCount: value.length });
                   });
