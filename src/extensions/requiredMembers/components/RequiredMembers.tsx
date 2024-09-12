@@ -26,13 +26,6 @@ export default class RequiredMembers extends React.Component<IRequiredMembersPro
 
   public componentDidMount(): void {
     Log.info(LOG_SOURCE, 'React Element: RequiredMembers mounted');
-  }
-
-  public componentWillUnmount(): void {
-    Log.info(LOG_SOURCE, 'React Element: RequiredMembers unmounted');
-  }
-
-  public render(): React.ReactElement<{}> {
     const COMMITTEE_NAME = this.props.event.listItem.getValueByName('FileLeafRef');
     GetActiveCommitteeMembers(COMMITTEE_NAME)
       .then(value => {
@@ -41,13 +34,26 @@ export default class RequiredMembers extends React.Component<IRequiredMembersPro
         console.error('Failed to query Committee');
         console.error(reason);
       });
+  }
 
+  public componentWillUnmount(): void {
+    Log.info(LOG_SOURCE, 'React Element: RequiredMembers unmounted');
+  }
+
+  private _doesCountEqualText = (): boolean => this.state.memberCount?.toString() === this.props.text
+
+  public render(): React.ReactElement<{}> {
     return (
       <div>
         {
           this.state.memberCount === null ?
             <div><Spinner label={`?/${this.props.text}`} ariaLive="assertive" labelPosition="right" /></div> :
-            <div>{this.state.memberCount}/{this.props.text}</div>
+            <div
+              title={this._doesCountEqualText() ? `Committee is Full` : `Committee is Missing Members!`}
+              style={{ color: this._doesCountEqualText() ? 'inherit' : 'red' }}
+            >
+              {this.state.memberCount}/{this.props.text === "" ? 0 : this.props.text}
+            </div>
         }
       </div>
     );
