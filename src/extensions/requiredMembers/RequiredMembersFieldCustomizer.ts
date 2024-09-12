@@ -9,7 +9,7 @@ import {
 
 import * as strings from 'RequiredMembersFieldCustomizerStrings';
 import RequiredMembers from './components/RequiredMembers';
-import { getSP } from '../../MyHelperMethods/MyHelperMethods';
+import { GetCommitteeLocalStorageKey, getClientStorage, getSP } from '../../MyHelperMethods/MyHelperMethods';
 
 /**
  * If your field customizer uses the ClientSideComponentProperties JSON input,
@@ -34,6 +34,17 @@ export default class RequiredMembersFieldCustomizer
     Log.info(LOG_SOURCE, `The following string should be equal: "RequiredMembersFieldCustomizer" and "${strings.Title}"`);
 
     getSP(this.context);
+
+    console.log('Required Member onInit');
+
+    let committeeCount = getClientStorage().local.getOrPut(GetCommitteeLocalStorageKey('Diversity Advisory Committee'), async () => {
+      debugger;
+      let activeMemberCount = (await getSP().web.lists.getByTitle('Diversity Advisory Committee').items.filter("OData__Status eq 'Successful'")()).length;
+
+      return Promise.resolve(activeMemberCount);
+    });
+    console.log('committeeCount', committeeCount);
+    debugger;
 
     return Promise.resolve();
   }

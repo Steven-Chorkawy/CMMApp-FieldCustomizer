@@ -1,8 +1,8 @@
 import { Log } from '@microsoft/sp-core-library';
 import * as React from 'react';
 
-import styles from './RequiredMembers.module.scss';
 import { IFieldCustomizerCellEventParameters } from '@microsoft/sp-listview-extensibility';
+import { Spinner } from '@fluentui/react';
 import { GetActiveCommitteeMembers } from '../../../MyHelperMethods/MyHelperMethods';
 
 export interface IRequiredMembersProps {
@@ -36,7 +36,6 @@ export default class RequiredMembers extends React.Component<IRequiredMembersPro
     const COMMITTEE_NAME = this.props.event.listItem.getValueByName('FileLeafRef');
     GetActiveCommitteeMembers(COMMITTEE_NAME)
       .then(value => {
-        console.log('Count Res:', value);
         this.setState({ memberCount: value });
       }).catch(reason => {
         console.error('Failed to query Committee');
@@ -44,8 +43,12 @@ export default class RequiredMembers extends React.Component<IRequiredMembersPro
       });
 
     return (
-      <div className={styles.requiredMembers}>
-        {this.state.memberCount === null ? <div>Loading...</div> : <div>{this.state.memberCount}/{this.props.text}</div> }
+      <div>
+        {
+          this.state.memberCount === null ?
+            <div><Spinner label={`?/${this.props.text}`} ariaLive="assertive" labelPosition="right" /></div> :
+            <div>{this.state.memberCount}/{this.props.text}</div>
+        }
       </div>
     );
   }
