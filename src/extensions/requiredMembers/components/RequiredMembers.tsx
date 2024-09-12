@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { IFieldCustomizerCellEventParameters } from '@microsoft/sp-listview-extensibility';
 import { Spinner } from '@fluentui/react';
-import { GetActiveCommitteeMembers } from '../../../MyHelperMethods/MyHelperMethods';
+import { GetActiveCommitteeMembers, getClientStorage, getSP } from '../../../MyHelperMethods/MyHelperMethods';
 
 export interface IRequiredMembersProps {
   text: string;
@@ -50,7 +50,15 @@ export default class RequiredMembers extends React.Component<IRequiredMembersPro
             <div><Spinner label={`?/${this.props.text}`} ariaLive="assertive" labelPosition="right" /></div> :
             <div
               title={this._doesCountEqualText() ? `Committee is Full` : `Committee is Missing Members!`}
-              style={{ color: this._doesCountEqualText() ? 'inherit' : 'red' }}
+              style={{ color: this._doesCountEqualText() ? 'inherit' : 'red', cursor: 'pointer' }}
+              onClick={() => {
+                this.setState({ memberCount: null });
+                getSP().web.lists.getByTitle(this.props.event.listItem.getValueByName('FileLeafRef')).items.filter("OData__Status eq 'Successful'")()
+                  .then(value => {
+                    getClientStorage().local.put(this.props.event.listItem.getValueByName('FileLeafRef'), value.length);
+                    this.setState({ memberCount: value.length });
+                  });
+              }}
             >
               {this.state.memberCount}/{this.props.text === "" ? 0 : this.props.text}
             </div>
