@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
     <Field ID="{f72e5b15-81e0-41e0-a7bd-2c232381fb2d}"
-            Name="SPFxPercentage"
-            DisplayName="Percentage"
+            Name="SPFx_RequiredMembers"
+            DisplayName="Required Members"
             Type="Number"
             Min="0"
             Required="FALSE"
